@@ -69,12 +69,13 @@ async function tryTransaction(url) {
 			console.log("Something went wrong");
 		});
 }
+*/
 var btcUrl = 'https://api.coindesk.com/v1/bpi/currentprice.json'
 var btcUrlRollback = 'https://jsonplaceholder.typicode.com/post/1'
 
 url = 'http://localhost:8000/zez.json'
 // tryTransaction(url);
-*/
+
 
 /*
 
@@ -89,28 +90,41 @@ rp(url)
 */
 
 async function tryAsync(url) {
+	var ctx = [];
 	try {
-		var ctx = [];
 		console.log("tryAsync called");
 
-		console.log('btc request passed');
 		var btcPrice = await rp(btcUrl);
-		ctx.push({ rollback: rp(btcUrlRollback) });
-		console.log(btcPrice);
+		console.log('btc request passed');
+		ctx.push(
+			{
+				rollback: function () {
+					console.log('rollback transaction');
+					rp(btcUrlRollback).then(function (res) {
+						console.log(res);
+					});
+				}
+			});
 
+		console.log("ctx :", ctx);
 		var ethPrice = await rp(url);  // this one should fail
 		ctx.push({ rollback: function () { rb(btcUrlRollback) } });
 		console.log(ethPrice);
 
 	} catch (err) {
+		console.log("transaction failed", ctx);
 		try {
-			while (ctx !== undefined && ctx.length != 0) {
-				console.log(ctx.pop().rollback());
+			while (ctx && ctx.length > 0) {
+				console.log("taken from stack");
+				let tipOfStak = ctx.pop();
+				tipOfStak.rollback();
+				console.log("rollback done");
+
 			}
 		} catch (error) {
 			console.log("failure during fail : ", ctx);
 		}
-		console.log("deviant : art");
+		console.log("all catch ended");
 	}
 }
 
