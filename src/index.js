@@ -24,24 +24,11 @@ var unos = {
 };
 
 var async = require('async');
+var btc = require('./transactional/btcRequestRollback');
+//var trouble = require('./transactional/problematicRequestRollback');
 
 
 
-async.waterfall([
-	function (callback) {
-		callback(null, 'one', 'two');
-	},
-	function (arg1, arg2, callback) {
-		// arg1 now equals 'one' and arg2 now equals 'two'
-		callback(null, 'three');
-	},
-	function (arg1, callback) {
-		// arg1 now equals 'three'
-		callback(null, 'done');
-	}
-], function (err, result) {
-	// result now equals 'done'
-});
 
 // Or, with named functions:
 async.waterfall([
@@ -50,27 +37,38 @@ async.waterfall([
 	buyInsurance
 ], function (err, ctx, result) {
 	console.log("err ", err);
-	console.log("ctx ", ctx);
-	console.log("result ", result);
+	// console.log("ctx ", ctx);
+	// console.log("result ", result);
 });
 
 
 function reserveFunds(callback) {
-	console.log('reserve')
-	ctx = [];
+	console.log("resere funds  : ", callback);
+	var ctx = [];
 	callback(null, ctx);
 }
-function logToDatabase(ctx, callback) {
-	console.log('logToDatabase')
-	callback(null, ctx);
+
+async function logToDatabase(ctx, callback) {
+	console.log('logToDatabase', callback)
+	try {
+		var result = await btc.request();
+		ctx.push(btc.rollback);
+		console.log('reserve ', result);
+	} catch (err) {
+		console.log("error ", err)
+		// callback(err, ctx);
+	}
 }
 function buyInsurance(ctx, callback) {
 	console.log('buyInsurance')
-	callback(null, ctx);
+	// callback(null, ctx);
 }
 
 
 
 console.log("EXIT AT END");
 // process.exit(1);
+
+
+
 
