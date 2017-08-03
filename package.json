@@ -11,6 +11,7 @@
   "author": "nikola",
   "license": "UNLICENCED",
   "dependencies": {
+    "async": "^2.5.0",
     "mongodb": "^2.2.30",
     "request": "^2.81.0"
   },
