@@ -54,7 +54,7 @@ as.waterfall([
 	reserveFunds,
 	logToDatabase,
 	buyInsurance
-], function (err, ctx, result) {
+], function ([err, ctx, result]) {
 	if (err != null) {
 		console.log(err);
 		rollbackAll();
