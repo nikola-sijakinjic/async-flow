@@ -99,18 +99,15 @@ async function tryAsync(url) {
 
 		console.log("ctx :", ctx);
 		var ethPrice = await rp(url);  // this one should fail
-		ctx.push({ rollback: function () { rb(btcUrlRollback) } });
+		ctx.push(rb(btcUrlRollback));
 		console.log(ethPrice);
 
 	} catch (err) {
 		console.log("transaction failed", ctx);
 		try {
 			while (ctx && ctx.length > 0) {
-				console.log("reading stack head");
 				let rollback = ctx.pop();
-				console.log("taken from stack");
 				let val = await rollback();
-				console.log("rollback done");
 			}
 		} catch (error) {
 			console.log("failure during fail : ", error);
@@ -118,7 +115,6 @@ async function tryAsync(url) {
 		console.log("all catch ended");
 	}
 }
-
 
 
 
