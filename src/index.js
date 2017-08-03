@@ -35,33 +35,30 @@ var reserveFunds = async function () {
 	return [ctx];
 }
 var logToDatabase = async function logToDatabase([ctx]) {
+	console.log("log to database context : ", ctx);
 	try {
 		var result = await btc.request();
-		ctx.push(btc.rollback);
-		console.log("log to database context : ", ctx);
+
 	} catch (err) {
 		ctx.push(btc.rollback);
+		console.log("not skipped : ", ctx);
+		throw { err: ctx };
 	}
 	return [ctx];
 }
 
 var buyInsurance = function buyInsurance([ctx]) {
 	console.log('buyInsurance context ', ctx);
-	return [null, ctx, "whool"];
+
+	return [ctx];
 }
 
 as.waterfall([
 	reserveFunds,
 	logToDatabase,
 	buyInsurance
-], function ([err, ctx, result]) {
-	if (err != null) {
-		console.log(err);
-		rollbackAll();
-	} else {
-		console.log(ctx);
-	}
-	console.log("ctx", ctx);
+], function (err) {
+	console.log("FAIL -- ", err);
 
 });
 
