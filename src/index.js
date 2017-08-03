@@ -23,46 +23,47 @@ var unos = {
 	}
 };
 
-var async = require('async');
+var as = require('async');
 var btc = require('./transactional/btcRequestRollback');
 //var trouble = require('./transactional/problematicRequestRollback');
 
 
 
+var reserveFunds = async function () {
+	console.log("resere funds  : ");
+	var ctx = [];
+	return [ctx];
+}
+var logToDatabase = async function logToDatabase([ctx]) {
+	try {
+		var result = await btc.request();
+		ctx.push(btc.rollback);
+		console.log("log to database context : ", ctx);
+	} catch (err) {
+		ctx.push(btc.rollback);
+	}
+	return [ctx];
+}
 
-// Or, with named functions:
-async.waterfall([
+var buyInsurance = function buyInsurance([ctx]) {
+	console.log('buyInsurance context ', ctx);
+	return [null, ctx, "whool"];
+}
+
+as.waterfall([
 	reserveFunds,
 	logToDatabase,
 	buyInsurance
 ], function (err, ctx, result) {
-	console.log("err ", err);
-	// console.log("ctx ", ctx);
-	// console.log("result ", result);
-});
-
-
-function reserveFunds(callback) {
-	console.log("resere funds  : ", callback);
-	var ctx = [];
-	callback(null, ctx);
-}
-
-async function logToDatabase(ctx, callback) {
-	console.log('logToDatabase', callback)
-	try {
-		var result = await btc.request();
-		ctx.push(btc.rollback);
-		console.log('reserve ', result);
-	} catch (err) {
-		console.log("error ", err)
-		// callback(err, ctx);
+	if (err != null) {
+		console.log(err);
+		rollbackAll();
+	} else {
+		console.log(ctx);
 	}
-}
-function buyInsurance(ctx, callback) {
-	console.log('buyInsurance')
-	// callback(null, ctx);
-}
+	console.log("ctx", ctx);
+
+});
 
 
 
