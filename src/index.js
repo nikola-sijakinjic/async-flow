@@ -13,7 +13,7 @@ chai.use(chaiHttp);
 var mongoclient = new MongoClient(new Server("localhost", 27017), { native_parser: true });
 var request = require('request');
 
-var url = 'mongodb://localhost:27017/test';
+// var url = 'mongodb://localhost:27017/test';
 var unos = {
 	"address": {
 		"street": "2 Avenue",
@@ -94,7 +94,7 @@ async function tryAsync(url) {
 		console.log("tryAsync called");
 
 		var btcPrice = await btc.request();
-		console.log('btc request passed');
+		console.log('btc response: ', btcPrice);
 		ctx.push(btc.rollback);
 
 		console.log("ctx :", ctx);
@@ -108,6 +108,7 @@ async function tryAsync(url) {
 			while (ctx && ctx.length > 0) {
 				let rollback = ctx.pop();
 				let val = await rollback();
+				console.log("rollback res ", val);
 			}
 		} catch (error) {
 			console.log("failure during fail : ", error);
