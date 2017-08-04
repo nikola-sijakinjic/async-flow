@@ -24,7 +24,7 @@ var optionsRollback = {
 function btcRequest(callback) {
 	return rp(options)
 		.then(function (json) {
-			console.log("btc request  --", json);
+			console.log("btc response ", json);
 			callback(null, json);
 		})
 		.catch(function (err) {

@@ -12,6 +12,8 @@ const bb = require('bluebird');
 var async = require('async');
 
 var btc = require('./transactional/btcRequestRollback')
+var problem = require('./transactional/problematicRequestRollback.js')
+
 async.waterfall([
 	function reserveFunds(callback) {
 		console.log("reserveFunds");
@@ -23,15 +25,14 @@ async.waterfall([
 	},
 	function (arg1, callback) {
 		console.log("third method");
-		callback(null, 'done');
+		problem.request(callback);
 	}
 ], function (err, result) {
 	if (err != null) {
 		console.log("Failed");
 	} else {
 		console.log("Success");
-	}
+	};
 });
 
-// Or, with named functions:
 
