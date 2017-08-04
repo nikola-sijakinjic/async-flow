@@ -14,28 +14,23 @@ var async = require('async');
 var btc = require('./transactional/btcRequestRollback')
 async.waterfall([
 	function reserveFunds(callback) {
-		console.log("reserveFunds ");
-		rp(options)
-			.then(function (json) {
-				console.log("jsonString  --", json);
-				callback(null, json);
-			})
-			.catch(function (err) {
-				console.log("err  in reserver");
-
-				callback(err, null);
-			});
+		console.log("reserveFunds");
+		btc.request(callback)
 	},
-	function (arg1, callback) {
-		console.log("err ");
+	function saveLogToDatabase(arg1, callback) {
+		console.log("seccond method");
 		callback(null, 'three');
 	},
 	function (arg1, callback) {
-		// arg1 now equals 'three'
+		console.log("third method");
 		callback(null, 'done');
 	}
 ], function (err, result) {
-	console.log("Failed");
+	if (err != null) {
+		console.log("Failed");
+	} else {
+		console.log("Success");
+	}
 });
 
 // Or, with named functions:

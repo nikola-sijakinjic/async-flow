@@ -14,17 +14,17 @@ var options = {
 };
 
 var optionsRollback = {
-	uri: 'https://newton.now.sh/factor/37',
+	uri: 'https://newton.now.sh/factor/9',
 	headers: {
 		'User-Agent': 'Request-Promise'
 	},
 	json: true // Automatically parses the JSON string in the response
 };
 
-function btcRequest(options) {
+function btcRequest(callback) {
 	return rp(options)
 		.then(function (json) {
-			console.log("jsonString  --", json);
+			console.log("btc request  --", json);
 			callback(null, json);
 		})
 		.catch(function (err) {
@@ -35,10 +35,10 @@ function btcRequest(options) {
 
 }
 
-function btcRollback(options) {
-	return rp(options)
+function btcRollback(callback) {
+	return rp(optionsRollback)
 		.then(function (json) {
-			console.log("jsonString  --", json);
+			console.log("btc rollback  --", json);
 			callback(null, json);
 		})
 		.catch(function (err) {
@@ -47,5 +47,5 @@ function btcRollback(options) {
 			callback(err, null);
 		});
 }
-module.exports.request = btcRequest(options);
-module.exports.rollback = btcRollback(optionsRollback) };
+module.exports.request = btcRequest;
+module.exports.rollback = btcRollback;
