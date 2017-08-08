@@ -1,6 +1,3 @@
-var MongoClient = require('mongodb').MongoClient;
-var Server = require('mongodb').Server;
-
 var async = require('async');
 
 var btc = require('./transactional/btcRequestRollback')

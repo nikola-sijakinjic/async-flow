@@ -1,8 +1,19 @@
 var rp = require('request-promise');
+var axios = require('axios');
+
+axios.interceptors.response.use(function (response) {
+	// Do something with response data
+	return response;
+}, function (error) {
+	if (error.response.status == 404) {
+		return Promise.resolve(error.response);
+	}
+	return Promise.reject(error);
+});
 
 function btc(waterfall) {
 	ctx = [];
-	rp('https://newton.now.sh/factor/1')
+	axios.get('http://localhost:4321/2')
 		.then(function (json) {
 			console.log("reserver succeded", json);
 
@@ -20,6 +31,7 @@ function btc(waterfall) {
 			waterfall(null, ctx);
 		})
 		.catch(function (err) {
+			console.log("err - ", err)
 			waterfall(err, ctx);
 		});
 
