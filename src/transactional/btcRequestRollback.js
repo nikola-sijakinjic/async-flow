@@ -1,8 +1,5 @@
 var rp = require('request-promise');
 
-
-var btcUrl = 'https://api.coindesk.com/v1/bpi/currentprice.json';
-var btcUrlRollback = 'http://jsonplaceholder.typicode.com/posts/1';
 function btc(waterfall) {
 	ctx = [];
 	rp('https://newton.now.sh/factor/1')

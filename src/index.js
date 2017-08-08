@@ -19,6 +19,12 @@ async.waterfall([
 	btc
 	,
 	function saveLogToDatabase(ctx, waterfall) {
+
+		async.parallel([
+			btc,
+			problem
+		]);
+
 		console.log("say what");
 		waterfall(null, ctx);
 	},
