@@ -2,13 +2,13 @@ var rp = require('request-promise');
 
 
 function problem(ctx, waterfall) {
-	rp('xhttps://newton.now.sh/factor/1')
+	rp('https://localhost:4321/1')
 		.then(function (json) {
 			console.log("reserver succeded", json);
 
 			// rolback if later operation fails
 			ctx.push(function () {
-				rp('https://newton.now.sh/factor/2')
+				rp('https://localhost:4321/2')
 					.then(function (htmlString) {
 						console.log("reserve rollback executed");
 					})

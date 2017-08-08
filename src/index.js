@@ -1,14 +1,6 @@
 var MongoClient = require('mongodb').MongoClient;
 var Server = require('mongodb').Server;
 
-var assert = require('assert');
-var request = require('request');
-var rp = require('request-promise');
-
-var chai = require('chai');
-var chaiHttp = require('chai-http');
-const bb = require('bluebird');
-
 var async = require('async');
 
 var btc = require('./transactional/btcRequestRollback')
@@ -20,10 +12,9 @@ async.waterfall([
 	,
 	function saveLogToDatabase(ctx, waterfall) {
 
-		async.parallel([
-			btc,
-			problem
-		]);
+		// async.parallel([
+		// 	btc, btc
+		// ]);
 
 		console.log("say what");
 		waterfall(null, ctx);
