@@ -1,33 +1,22 @@
-var MongoClient = require('mongodb').MongoClient;
-var Server = require('mongodb').Server;
+var axios = require('axios');
 
-var assert = require('assert');
-var request = require('request');
-var chai = require('chai');
-var chaiHttp = require('chai-http');
-var rp = require('request-promise');
-
-chai.use(chaiHttp);
-
-
-var mongoclient = new MongoClient(new Server("localhost", 27017), { native_parser: true });
-var request = require('request');
 
 btc = require('./transactional/btcRequestRollback.js')
+problem = require('./transactional/problematicRequestRollback.js')
 
-async function tryAsync(url) {
+async function tryAsync() {
 	var ctx = [];
 	try {
 		console.log("tryAsync called");
 
 		var btcPrice = await btc.request();
-		console.log('btc response: ', btcPrice);
+		console.log('btc response: ', btcPrice.data);
 		ctx.push(btc.rollback);
 
+		var ethPrice = await problem.request();  // this one should fail
 		console.log("ctx :", ctx);
-		var ethPrice = await x(url);  // this one should fail
-		ctx.push(rb(btcUrlRollback));
-		console.log(ethPrice);
+		ctx.push(problem.rollback);
+		console.log("eth - ", ethPrice.status);
 
 	} catch (err) {
 		console.log("transaction failed", err);
@@ -35,7 +24,7 @@ async function tryAsync(url) {
 			while (ctx && ctx.length > 0) {
 				let rollback = ctx.pop();
 				let val = await rollback();
-				console.log("rollback res ", val);
+				console.log("rollback res ", val.status);
 			}
 		} catch (error) {
 			console.log("failure during fail : ", error);
@@ -46,7 +35,7 @@ async function tryAsync(url) {
 
 
 
-tryAsync("https://staging-davos.heybrolly.com/users");
+tryAsync();
 
 console.log("EXIT AT END");
 // process.exit(1);

@@ -1,10 +1,11 @@
-var rp = require('request-promise');
+var axios = require('axios');
+
+var problem = 'xhttp://localhost:4321/2'
+// var problem = 'https://asdas'
+var problemRollback = 'http://localhost:4321/1'
 
 
-var btcUrl = 'https://asdasdasdas'
-var btcUrlRollback = 'https://jsonplaceholder.typicode.com/post/2'
 
-module.exports = {
-	request: rp(btcUrl),
-	rollback: rp(btcUrlRollback)
-}
+module.exports.request = function () { return axios.get(problem) };
+module.exports.rollback = function () { return axios.get(problemRollback); };
+
