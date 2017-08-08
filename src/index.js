@@ -11,12 +11,12 @@ const bb = require('bluebird');
 
 var async = require('async');
 
-var reserveFunds = require('./transactional/btcRequestRollback')
+var btc = require('./transactional/btcRequestRollback')
 var problem = require('./transactional/problematicRequestRollback.js')
 
 
 async.waterfall([
-	reserveFunds
+	btc
 	,
 	function saveLogToDatabase(ctx, waterfall) {
 		console.log("say what");

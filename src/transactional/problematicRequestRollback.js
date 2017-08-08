@@ -1,3 +1,6 @@
+var rp = require('request-promise');
+
+
 function problem(ctx, waterfall) {
 	rp('xhttps://newton.now.sh/factor/1')
 		.then(function (json) {

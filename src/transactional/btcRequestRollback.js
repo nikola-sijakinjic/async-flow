@@ -1,12 +1,18 @@
-function reserveFunds(waterfall) {
+var rp = require('request-promise');
+
+
+var btcUrl = 'https://api.coindesk.com/v1/bpi/currentprice.json';
+var btcUrlRollback = 'http://jsonplaceholder.typicode.com/posts/1';
+function btc(waterfall) {
 	ctx = [];
-	rp('https://newton.now.sh/factor/21')
+	rp('https://newton.now.sh/factor/1')
 		.then(function (json) {
 			console.log("reserver succeded", json);
 
 			// rolback if later operation fails
 			ctx.push(function () {
-				rp('https://newton.now.sh/factor/121')
+				console.log('push succeded');
+				rp('https://newton.now.sh/factor/2')
 					.then(function (htmlString) {
 						console.log("reserve rollback executed");
 					})
@@ -19,6 +25,7 @@ function reserveFunds(waterfall) {
 		.catch(function (err) {
 			waterfall(err, ctx);
 		});
+
 }
 
-module.exports = reserveFunds(waterfall);
+module.exports = btc;
